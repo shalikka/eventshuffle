@@ -1,0 +1,20 @@
+{
+  "name": "eventshuffle",
+  "version": "1.0.0",
+  "description": "Eventshuffle backend API",
+  "main": "index.js",
+  "scripts": {
+    "start-dev": "standard && nodemon index.js",
+    "start": "node index.js",
+    "debug": "nodemon --inspect index.js"
+  },
+  "author": "shalikka",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "standard": "^16.0.3"
+  }
+}
