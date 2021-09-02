@@ -6,7 +6,9 @@
   "scripts": {
     "start-dev": "standard && nodemon index.js",
     "start": "node index.js",
-    "debug": "nodemon --inspect index.js"
+    "debug": "nodemon --inspect index.js",
+    "migrate-up": "db-migrate up",
+    "migrate-down": "db-migrate down"
   },
   "author": "shalikka",
   "license": "ISC",
