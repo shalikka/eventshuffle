@@ -7,7 +7,9 @@ const STATUS_CODES = {
 }
 
 const sendError = (res, err) => {
-  res.status(err.statusCode || STATUS_CODES.statusInternalError)
+  res.status(err.statusCode ||
+    (err.message.includes('invalid input') ? STATUS_CODES.statusBadRequest : STATUS_CODES.statusInternalError))
+
   res.send({})
 }
 
