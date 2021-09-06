@@ -22,3 +22,7 @@ Run the migrations:
 db-migrate up
 db-migrate down
 ```
+### Create new migration
+```
+db-migrate create <migration_name>
+```

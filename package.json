@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "Eventshuffle backend API",
   "main": "index.js",
+  "standard": {
+    "ignore": [
+      "/migrations/**/*.js"
+    ]
+  },
   "scripts": {
     "start-dev": "standard && nodemon index.js",
     "start": "node index.js",
@@ -20,6 +25,7 @@
     "pg": "^8.7.1"
   },
   "devDependencies": {
+    "nodemon": "^2.0.12",
     "standard": "^16.0.3"
   }
 }
