@@ -1,5 +1,6 @@
 const { getDbPool } = require('../util/database')
 const { STATUS_CODES } = require('../util/error-util')
+const { constructInsertEventQuery } = require('../util/db-util')
 
 const dbPool = getDbPool()
 
@@ -27,6 +28,26 @@ const getEvent = (id) => {
     .catch(error => new Promise(() => {
       throw error
     }))
+}
+
+const postEvent = async (event) => {
+  const dbClient = await dbPool.connect()
+
+  try {
+    await dbClient.query('BEGIN')
+    const queryText = 'INSERT INTO event(name) VALUES($1) RETURNING id'
+    const res = await dbClient.query(queryText, [event.name])
+
+    const { insertDatesQuery, insertDatesValues } = constructInsertEventQuery(event.dates, res.rows[0].id)
+
+    await dbClient.query(insertDatesQuery, insertDatesValues)
+    await dbClient.query('COMMIT')
+  } catch (exception) {
+    await dbClient.query('ROLLBACK')
+    throw exception
+  } finally {
+    dbClient.release()
+  }
 }
 
 module.exports = {

@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/migrations/sqls/20210902150115-eventshuffle-tables-down.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/migrations/sqls/20210902150115-eventshuffle-tables-up.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/migrations/sqls/20210906151639-fix-table-primary-keys-up.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/services/event-service.js" dialect="PostgreSQL" />
   </component>
 </project>

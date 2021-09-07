@@ -25,6 +25,7 @@
     "pg": "^8.7.1"
   },
   "devDependencies": {
+    "jest": "^27.1.0",
     "nodemon": "^2.0.12",
     "standard": "^16.0.3"
   }
