@@ -15,7 +15,12 @@ const getEvents = () => {
 
 const getEvent = (id) => {
   const param = [id]
-  return dbPool.query('SELECT id, name from event WHERE id = $1', param)
+  return dbPool.query(`
+        SELECT events.id, events.name, json_agg(date) AS dates 
+        FROM event events
+            LEFT JOIN event_date dates ON dates.event_id = events.id 
+        WHERE events.id = $1
+        GROUP BY events.id, events.name`, param)
     .then(result => {
       if (!result.rows || result.rows.length < 1) {
         throw { statusCode: STATUS_CODES.statusNotFound }
