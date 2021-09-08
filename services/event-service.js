@@ -11,9 +11,6 @@ const getEvents = () => {
         events: result.rows
       }
     })
-    .catch(error => new Promise(() => {
-      throw error
-    }))
 }
 
 const getEvent = (id) => {
@@ -25,20 +22,19 @@ const getEvent = (id) => {
       }
       return result.rows[0]
     })
-    .catch(error => new Promise(() => {
-      throw error
-    }))
 }
 
 const postEvent = async (event) => {
   const dbClient = await dbPool.connect()
+  let eventId
 
   try {
     await dbClient.query('BEGIN')
     const queryText = 'INSERT INTO event(name) VALUES($1) RETURNING id'
     const res = await dbClient.query(queryText, [event.name])
+    eventId = res.rows[0].id
 
-    const { insertDatesQuery, insertDatesValues } = constructInsertEventQuery(event.dates, res.rows[0].id)
+    const { insertDatesQuery, insertDatesValues } = constructInsertEventQuery(event.dates, eventId)
 
     await dbClient.query(insertDatesQuery, insertDatesValues)
     await dbClient.query('COMMIT')
@@ -48,9 +44,12 @@ const postEvent = async (event) => {
   } finally {
     dbClient.release()
   }
+
+  return { id: parseInt(eventId) }
 }
 
 module.exports = {
   getEvents,
-  getEvent
+  getEvent,
+  postEvent
 }

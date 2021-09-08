@@ -29,4 +29,10 @@ describe('constructInsertEventQuery', () => {
     expect(actual.insertDatesQuery).toEqual(expectedQuery)
     expect(actual.insertDatesValues).toEqual(expectedValues)
   })
+
+  it('Construct parametrized query for event_date insertion with no date values', () => {
+    expect(() => {
+      constructInsertEventQuery([], 1)
+    }).toThrowError('invalid input')
+  })
 })

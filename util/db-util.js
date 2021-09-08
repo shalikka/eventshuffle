@@ -1,4 +1,7 @@
 const constructInsertEventQuery = (eventDates, eventId) => {
+  if (!eventDates || eventDates.length < 1) {
+    throw new Error('invalid input')
+  }
   let insertDatesQuery = 'INSERT INTO event_date(date, event_id) VALUES '
   const insertDatesValues = []
   let counter = 1
