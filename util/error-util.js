@@ -13,7 +13,6 @@ const sendError = (res, err) => {
   res.send({})
 }
 
-
 module.exports = {
   STATUS_CODES,
   sendError

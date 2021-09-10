@@ -1,6 +1,6 @@
 const { getDbPool } = require('../util/database')
 const { STATUS_CODES } = require('../util/error-util')
-const { constructInsertEventQuery } = require('../util/db-util')
+const { constructInsertEventQuery, constructInsertVoteQuery } = require('../util/db-util')
 
 const dbPool = getDbPool()
 
@@ -53,8 +53,14 @@ const postEvent = async (event) => {
   return { id: parseInt(eventId) }
 }
 
+const postVote = (eventId, vote) => {
+  const { insertVoteQuery, insertVoteValues } = constructInsertVoteQuery(vote, eventId)
+  return dbPool.query(insertVoteQuery, insertVoteValues)
+}
+
 module.exports = {
   getEvents,
   getEvent,
-  postEvent
+  postEvent,
+  postVote
 }

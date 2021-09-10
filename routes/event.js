@@ -29,7 +29,14 @@ router.post('/', (req, res) => {
 })
 
 router.post('/:id/vote', (req, res) => {
-
+  eventService.postVote(req.params.id, req.body)
+    .then(result => {
+      if (result.rows.length > 0) {
+        res.status(STATUS_CODES.statusCreated)
+      }
+      res.json()
+    })
+    .catch(error => sendError(res, error))
 })
 
 module.exports = router
