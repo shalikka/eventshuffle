@@ -1,4 +1,4 @@
-const { constructInsertEventQuery, constructInsertVoteQuery } = require('./db-util')
+const { constructInsertEventQuery, constructInsertVoteQuery } = require('./event-db-util')
 
 describe('constructInsertEventQuery', () => {
   it('Construct parametrized query for event_date insertion with several values', () => {

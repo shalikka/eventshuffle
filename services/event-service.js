@@ -1,61 +1,72 @@
-const { getDbPool } = require('../util/database')
 const { STATUS_CODES } = require('../util/error-util')
-const { constructInsertEventQuery, constructInsertVoteQuery } = require('../util/db-util')
+const { constructInsertVoteQuery, constructInsertEventQuery } = require('../util/event-db-util')
+const { withTransactional } = require('./db-service')
 
-const dbPool = getDbPool()
+const insertEventQuery = async (event, dbClient) => {
+  const queryText = 'INSERT INTO event(name) VALUES($1) RETURNING id'
+  const res = await dbClient.query(queryText, [event.name])
+  const eventId = res.rows[0].id
 
-const getEvents = () => {
-  return dbPool.query('SELECT id, name from event')
-    .then(result => {
-      return {
-        events: result.rows
-      }
-    })
+  const { insertDatesQuery, insertDatesValues } = constructInsertEventQuery(event.dates, eventId)
+
+  await dbClient.query(insertDatesQuery, insertDatesValues)
+  return eventId
 }
 
-const getEvent = (id) => {
-  const param = [id]
-  return dbPool.query(`
-        SELECT events.id, events.name, json_agg(date) AS dates 
-        FROM event events
-            LEFT JOIN event_date dates ON dates.event_id = events.id 
-        WHERE events.id = $1
-        GROUP BY events.id, events.name`, param)
-    .then(result => {
-      if (!result.rows || result.rows.length < 1) {
-        throw { statusCode: STATUS_CODES.statusNotFound }
-      }
-      return result.rows[0]
-    })
+const insertVoteQuery = async (eventId, vote, dbClient) => {
+  const { insertVoteQuery, insertVoteValues } = constructInsertVoteQuery(vote, eventId)
+  const res = await dbClient.query(insertVoteQuery, insertVoteValues)
+  if (res.rowCount > 0) {
+    return getEvent(eventId)
+  } else {
+    throw { statusCode: STATUS_CODES.statusBadRequest }
+  }
+}
+
+const getEventQuery = async (eventId, dbClient) => {
+  const event = await dbClient.query(`
+        SELECT e.id, e.name, json_agg(dates.date) AS dates 
+        FROM event e
+            LEFT JOIN event_date dates ON dates.event_id = e.id 
+        WHERE e.id = $1
+        GROUP BY e.id, e.name`, [eventId])
+  const votes = await dbClient.query(`
+        SELECT e.date, json_agg(v.person) AS people
+        FROM event_date e
+            INNER JOIN vote v on e.id = v.event_date_id 
+        WHERE e.event_id = $1
+        GROUP BY e.date, e.event_id`, [eventId])
+  return { event, votes }
+}
+
+const getEvents = async () => {
+  const result = withTransactional((dbClient) => {
+    return dbClient.query('SELECT id, name from event')
+  })
+
+  return {
+    events: result.rows
+  }
+}
+
+const getEvent = async (id) => {
+  const result = withTransactional((dbClient) => getEventQuery(id, dbClient))
+
+  if (!result.event || result.event.rowCount < 1) {
+    throw { statusCode: STATUS_CODES.statusNotFound }
+  }
+  const event = result.event.rows[0]
+  event.votes = result.votes.rows
+  return event
 }
 
 const postEvent = async (event) => {
-  const dbClient = await dbPool.connect()
-  let eventId
-
-  try {
-    await dbClient.query('BEGIN')
-    const queryText = 'INSERT INTO event(name) VALUES($1) RETURNING id'
-    const res = await dbClient.query(queryText, [event.name])
-    eventId = res.rows[0].id
-
-    const { insertDatesQuery, insertDatesValues } = constructInsertEventQuery(event.dates, eventId)
-
-    await dbClient.query(insertDatesQuery, insertDatesValues)
-    await dbClient.query('COMMIT')
-  } catch (exception) {
-    await dbClient.query('ROLLBACK')
-    throw exception
-  } finally {
-    dbClient.release()
-  }
-
-  return { id: parseInt(eventId) }
+  const res = await withTransactional((dbClient) => insertEventQuery(event, dbClient))
+  return { id: parseInt(res) }
 }
 
-const postVote = (eventId, vote) => {
-  const { insertVoteQuery, insertVoteValues } = constructInsertVoteQuery(vote, eventId)
-  return dbPool.query(insertVoteQuery, insertVoteValues)
+const postVote = async (eventId, vote) => {
+  return withTransactional((dbClient) => insertVoteQuery(eventId, vote, dbClient))
 }
 
 module.exports = {
