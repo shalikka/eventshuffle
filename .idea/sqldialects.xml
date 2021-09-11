@@ -5,6 +5,8 @@
     <file url="file://$PROJECT_DIR$/migrations/sqls/20210902150115-eventshuffle-tables-up.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/migrations/sqls/20210906151639-fix-table-primary-keys-up.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/migrations/sqls/20210908192446-fix-vote-table-down.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/migrations/sqls/20210911121046-refactor-vote-table-down.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/migrations/sqls/20210911121046-refactor-vote-table-up.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/services/event-service.js" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/util/event-db-util.js" dialect="PostgreSQL" />
   </component>

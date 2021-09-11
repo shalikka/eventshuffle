@@ -32,7 +32,7 @@ const getEventQuery = async (eventId, dbClient) => {
         GROUP BY e.id, e.name`, [eventId])
   const votes = await dbClient.query(`
         SELECT e.date, json_agg(v.person) AS people
-        FROM event_date e
+        FROM event_date e 
             INNER JOIN vote v on e.id = v.event_date_id 
         WHERE e.event_id = $1
         GROUP BY e.date, e.event_id`, [eventId])
@@ -45,12 +45,12 @@ const getEvents = async () => {
   })
 
   return {
-    events: result.rows
+    events: result.rows || []
   }
 }
 
 const getEvent = async (id) => {
-  const result = withTransactional((dbClient) => getEventQuery(id, dbClient))
+  const result = await withTransactional((dbClient) => getEventQuery(id, dbClient))
 
   if (!result.event || result.event.rowCount < 1) {
     throw { statusCode: STATUS_CODES.statusNotFound }
@@ -65,7 +65,7 @@ const postEvent = async (event) => {
   return { id: parseInt(res) }
 }
 
-const postVote = async (eventId, vote) => {
+const postVote = (eventId, vote) => {
   return withTransactional((dbClient) => insertVoteQuery(eventId, vote, dbClient))
 }
 
