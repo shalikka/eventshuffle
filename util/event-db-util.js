@@ -1,6 +1,8 @@
+const { throwBadRequestError } = require('./error-util')
+
 const constructInsertEventQuery = (eventDates, eventId) => {
   if (!eventDates || eventDates.length < 1) {
-    throw new Error('invalid input')
+    throwBadRequestError()
   }
 
   // Construct variable placeholders for date values based on the input in eventDates
@@ -20,7 +22,7 @@ const constructInsertEventQuery = (eventDates, eventId) => {
 
 const constructInsertVoteQuery = (vote, eventId) => {
   if (!vote || !vote.votes || vote.votes.length < 1) {
-    throw new Error('invalid input')
+    throwBadRequestError()
   }
 
   // Construct variable placeholders for date values based on the input in vote.votes
