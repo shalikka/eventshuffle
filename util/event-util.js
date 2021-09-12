@@ -1,10 +1,10 @@
 const formatVotes = (votes) => {
   return votes.map(vote => {
-      return {
-        date: vote.date.toISOString().split('T')[0],
-        people: vote.people
-      }
+    return {
+      date: vote.date.toISOString().split('T')[0],
+      people: vote.people
     }
+  }
   )
 }
 

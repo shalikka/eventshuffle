@@ -1,4 +1,4 @@
-const { STATUS_CODES } = require('../util/error-util')
+const { throwNotFoundError, throwBadRequestError } = require('../util/error-util')
 const { constructInsertVoteQuery, constructInsertEventQuery } = require('../util/event-db-util')
 const { withTransactional } = require('./db-service')
 const { formatDateStrings, formatVotes } = require('../util/event-util')
@@ -17,7 +17,7 @@ const getEvent = async (id) => {
   const result = await withTransactional((dbClient) => getEventQuery(id, dbClient))
 
   if (!result.event || result.event.rowCount < 1) {
-    throw { statusCode: STATUS_CODES.statusNotFound }
+    throwNotFoundError()
   }
   const event = result.event.rows[0]
   event.dates = formatDateStrings(result.event.rows[0].dates)
@@ -42,13 +42,13 @@ const postVote = async (eventId, vote) => {
 const getEventResults = async (eventId) => {
   const result = await withTransactional((dbClient) => getResultQuery(eventId, dbClient))
   if (result.rowCount < 1) {
-    throw { statusCode: STATUS_CODES.statusNotFound }
+    throwNotFoundError()
   }
   return {
     id: result.rows[0].id,
     name: result.rows[0].name,
     suitableDates: formatVotes(result.rows)
-    }
+  }
 }
 
 const insertEventQuery = async (event, dbClient) => {
@@ -68,7 +68,7 @@ const insertVoteQuery = async (eventId, vote, dbClient) => {
   if (res.rowCount > 0) {
     return getEventQuery(eventId, dbClient)
   } else {
-    throw { statusCode: STATUS_CODES.statusBadRequest }
+    throwBadRequestError()
   }
 }
 

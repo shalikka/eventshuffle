@@ -13,7 +13,21 @@ const sendError = (res, err) => {
   res.send({})
 }
 
+const throwNotFoundError = () => {
+  const error = new Error()
+  error.statusCode = STATUS_CODES.statusNotFound
+  throw error
+}
+
+const throwBadRequestError = () => {
+  const error = new Error()
+  error.statusCode = STATUS_CODES.statusBadRequest
+  throw error
+}
+
 module.exports = {
   STATUS_CODES,
-  sendError
+  sendError,
+  throwNotFoundError,
+  throwBadRequestError
 }

@@ -4,7 +4,7 @@ const dbPool = getDbPool()
 
 const withTransactional = async (fn) => {
   const dbClient = await dbPool.connect()
-  let response = undefined
+  let response
 
   try {
     await dbClient.query('BEGIN')
