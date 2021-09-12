@@ -16,7 +16,9 @@ router.get('/:id', (req, res) => {
 })
 
 router.get('/:id/results', (req, res) => {
-
+  eventService.getEventResults((req.params.id))
+    .then(results => res.json(results))
+    .catch(error => sendError(res, error))
 })
 
 router.post('/', (req, res) => {

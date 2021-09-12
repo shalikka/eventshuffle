@@ -1,0 +1,4 @@
+DELETE FROM event_date;
+
+ALTER TABLE event_date
+    ALTER COLUMN date TYPE TIMESTAMP WITH TIME ZONE;

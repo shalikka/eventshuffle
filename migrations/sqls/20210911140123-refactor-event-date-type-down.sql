@@ -1,0 +1,2 @@
+ALTER TABLE event_date
+    ALTER COLUMN date TYPE DATE;
