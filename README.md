@@ -11,6 +11,8 @@ Node version used is 14.17.6.
 Install Docker Desktop: https://www.docker.com/products/docker-desktop
 
 ## Run the API
+After the following steps the API responds in: `http://localhost:8081/api/v1/event ...`
+
 Start the database with Docker: 
 ```
 docker run --name eventshuffle-postgres -p 5433:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres

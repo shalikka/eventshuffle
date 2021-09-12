@@ -52,10 +52,12 @@ const getEventResults = async (eventId) => {
 }
 
 const insertEventQuery = async (event, dbClient) => {
+  // First insert event
   const queryText = 'INSERT INTO event(name) VALUES($1) RETURNING id'
   const res = await dbClient.query(queryText, [event.name])
   const eventId = res.rows[0].id
 
+  // Insert dates related to event using eventId just created
   const { insertDatesQuery, insertDatesValues } = constructInsertEventQuery(event.dates, eventId)
 
   await dbClient.query(insertDatesQuery, insertDatesValues)

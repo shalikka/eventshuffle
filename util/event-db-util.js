@@ -24,6 +24,8 @@ const constructInsertVoteQuery = (vote, eventId) => {
   }
 
   // Construct variable placeholders for date values based on the input in vote.votes
+  // as $3, $4...
+  // Starting from 3 as the first parameters are already reserved for person and eventId
   const startValue = 3
   let variablePlaceholders = ''
   const parameterValues = []
