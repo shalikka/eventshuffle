@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start-dev": "standard && nodemon index.js",
-    "start": "node index.js",
+    "start": "db-migrate up && node index.js",
     "debug": "nodemon --inspect index.js",
     "test": "jest",
     "migrate-up": "db-migrate up",
