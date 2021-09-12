@@ -7,7 +7,9 @@
     "ignore": [
       "/migrations/**/*.js"
     ],
-    "env": [ "jest" ]
+    "env": [
+      "jest"
+    ]
   },
   "scripts": {
     "start-dev": "standard && nodemon index.js",

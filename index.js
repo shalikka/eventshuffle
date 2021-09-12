@@ -7,5 +7,6 @@ const app = express()
 app.use('/api/v1/event', express.json(), event)
 
 app.listen(config.PORT, () => {
+  // TODO implement proper logging
   console.log(`server started on port ${config.PORT}`)
 })

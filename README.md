@@ -1,3 +1,7 @@
+# Eventshuffle backend API
+This is an exercise project implementation.
+The code is not production ready and is meant to be run locally.
+
 ## System requirements
 
 ### Node version
@@ -9,15 +13,13 @@ Install Docker Desktop: https://www.docker.com/products/docker-desktop
 ## Run the API
 Start the database with Docker: 
 ```
-docker run --name eventshuffle-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
-
+docker run --name eventshuffle-postgres -p 5433:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 ```
-Go to the root of the source code and run the API, it will run in port 8080 by default. In case you need to change 
+Go to the root of the source code and run the API, it will run in port 8081 by default. In case you need to change 
 it just override the value PORT in file .env
 ```
-cd eventshuffle
-eventshuffle % npm install
-eventshuffle % npm start
+npm install
+npm start
 ```
 To run the tests:
 ```
@@ -57,10 +59,4 @@ No further modifications needed, just use the frontend in browser as normally.
 ```
 npm install
 npm run debug
-```
-
-### Run tests
-To run the tests:
-```
-npm test
 ```
