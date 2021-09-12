@@ -28,7 +28,7 @@ To run the tests:
 npm test
 ```
 
-## Setting up local environment
+## Setting up local development environment
 Get the Docker Desktop and run the database as instructed in chapter Run the API.
 
 ### Database operations
